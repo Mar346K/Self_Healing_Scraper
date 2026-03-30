@@ -1,4 +1,4 @@
-# 🕸️ Autonomous Data Refinery (Self-Healing Scraper)
+### 🕸️ Autonomous Data Refinery (Self-Healing Scraper)
 
 A deterministic, polyglot data ingestion pipeline designed for volatile public web sources.
 
@@ -24,3 +24,27 @@ graph TD
     H -->|Extracts Data & New Rules| I[(Update Redis Cache)]
     F --> J[Standardized JSON Output]
     H --> J
+```
+
+## 🚀 DevSecOps & Enterprise Standards
+* Zero-Trust Secrets: API keys managed via pydantic-settings.
+
+* Strict Guardrails: CI/CD pipeline enforces ruff formatting, mypy static typing, and bandit AST security scanning on every commit.
+
+* Bleeding-Edge Inference: Includes experimental support for Google Research's TurboQuant (3-bit KV Cache compression) for local, OOM-resistant HTML processing on consumer hardware.
+
+## 💻 Quick Start (Dockerized)
+Spin up the entire microservice cluster locally:
+
+```Bash
+docker compose up -d --build
+```
+
+# Send a dynamic extraction request:
+
+
+```Bash
+curl -X POST http://localhost:8000/extract \
+     -H "Content-Type: application/json" \
+     -d '{"url": "https://example.com", "target_schema": {"main_heading": "string"}}'
+```
