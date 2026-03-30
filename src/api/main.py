@@ -1,7 +1,9 @@
 from typing import Any, Dict
 
-from pydantic import BaseModel, HttpUrl
 from fastapi import FastAPI
+from pydantic import BaseModel, HttpUrl
+
+from src.workers.tasks import extract_data_task
 
 app = FastAPI(
     title="Self-Healing Scraper API",
@@ -16,11 +18,13 @@ class ExtractionRequest(BaseModel):
 
 
 @app.post("/extract")
-async def trigger_extraction(request: ExtractionRequest) -> Dict[str, str]:
-    # TODO: Dispatch task to the Celery queue
+async def trigger_extraction(request: ExtractionRequest) -> Dict[str, Any]:
+    # Dispatch the task to the Redis message queue asynchronously
+    task = extract_data_task.delay(str(request.url), request.target_schema)
+
     return {
         "message": "Extraction task accepted.",
         "url": str(request.url),
         "status": "queued",
-        "trace_id": "placeholder-trace-id-123",
+        "task_id": task.id,
     }
