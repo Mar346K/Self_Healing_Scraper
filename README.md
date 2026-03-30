@@ -1,4 +1,4 @@
-![CI Status](https://img.shields.io/github/actions/workflow/status/[YOUR_GITHUB_USERNAME]/self_healing_scraper/ci.yml?branch=main&label=CI)
+!![CI Status](https://github.com/Mar346K/Self_Healing_Scraper/actions/workflows/ci.yml/badge.svg)
 ![Python Version](https://img.shields.io/badge/python-3.12+-blue.svg)
 ![Code Style](https://img.shields.io/badge/code%20style-ruff-000000.svg)
 ![Security](https://img.shields.io/badge/security-bandit-yellow.svg)
