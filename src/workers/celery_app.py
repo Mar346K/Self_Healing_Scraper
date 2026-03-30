@@ -1,14 +1,11 @@
 from celery import Celery
-
-# We will move this to a secure .env config later,
-# but hardcoding the local Redis URL is fine for Sprint 1.
-REDIS_URL = "redis://localhost:6379/0"
+from src.core.config import settings
 
 celery_app = Celery(
     "scraper_worker",
-    broker=REDIS_URL,
-    backend=REDIS_URL,
-    include=["src.workers.tasks"],  # We will build this file next
+    broker=settings.redis_url,
+    backend=settings.redis_url,
+    include=["src.workers.tasks"],
 )
 
 celery_app.conf.update(

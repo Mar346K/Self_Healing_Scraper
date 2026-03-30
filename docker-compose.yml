@@ -1,9 +1,25 @@
-version: "3.8"
-
 services:
   redis:
     image: redis:7-alpine
-    container_name: scraper-redis
     ports:
-      - "6379:6379"
-    restart: unless-stopped
+      - "6380:6379"
+  api:
+    build:
+      context: .
+      dockerfile: docker/api.Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    depends_on:
+      - redis
+  worker:
+    build:
+      context: .
+      dockerfile: docker/worker.Dockerfile
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    depends_on:
+      - redis

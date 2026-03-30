@@ -6,9 +6,10 @@ import redis
 from src.workers.celery_app import celery_app
 from src.scrapers.engine import StandardScraper
 from src.healers.llm_extractor import AIHealer
+from src.core.config import settings
 
-# Connect directly to the local Redis instance to use as our rule cache
-redis_client = redis.Redis.from_url("redis://localhost:6379/0", decode_responses=True)
+# Use the Pydantic settings here instead of hardcoding localhost
+redis_client = redis.Redis.from_url(settings.redis_url, decode_responses=True)
 
 
 @celery_app.task(name="extract_data_task")

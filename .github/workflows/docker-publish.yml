@@ -1,0 +1,9 @@
+# .github/workflows/docker-publish.yml
+name: Docker Publish Placeholder
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Docker publish workflow to be implemented."

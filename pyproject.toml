@@ -17,7 +17,7 @@ dependencies = [
     "opentelemetry-api>=1.23.0",   # Massive traceability
     "opentelemetry-sdk>=1.23.0",
     "openai>=1.14.0",              # LLM client (swappable to Anthropic/Ollama)
-    # "turboquant>=0.1.0"          # Drop this in later when we optimize the KV cache
+    "turboquant>=0.1.0"          # Drop this in later when we optimize the KV cache
 ]
 
 [project.optional-dependencies]
@@ -36,3 +36,7 @@ target-version = "py312"
 
 [tool.mypy]
 strict = true
+
+[tool.bandit]
+exclude_dirs = ["tests"]
+skips = ["B101"]
