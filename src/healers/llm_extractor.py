@@ -1,5 +1,5 @@
 import json
-from typing import Any, Dict
+from typing import Any, Dict, cast
 
 from google import genai
 from google.genai import types
@@ -50,7 +50,12 @@ class AIHealer:
                 ),
             )
 
-            payload = json.loads(response.text)
+            # 1. Guard against None returns
+            if not response.text:
+                raise ValueError("Gemini returned an empty response.")
+
+            # 2. Cast the parsed JSON explicitly to a Dictionary
+            payload = cast(Dict[str, Any], json.loads(response.text))
             return payload
 
         except Exception as e:

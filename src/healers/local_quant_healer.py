@@ -8,11 +8,8 @@ class LocalTurboQuantHealer:
     Offline fallback using Google's TurboQuant KV Cache compression.
     """
 
-    def __init__(self, model_id="meta-llama/Meta-Llama-3-8B-Instruct"):
-        # The 'revision' is a specific commit hash to prevent Supply Chain attacks.
-        # This is a placeholder; in production, you'd use the current stable hash.
-        # We use '# nosec B615' to tell Bandit we have acknowledged the risk
-        # if we choose to remain on 'main' during R&D.
+    def __init__(self, model_id: str = "meta-llama/Meta-Llama-3-8B-Instruct") -> None:
+        # Note the '-> None' above. This satisfies Mypy's strict requirement.
 
         print("[System] Initializing local inference engine...")
 

@@ -14,6 +14,8 @@ jobs:
       - name: Linting (Ruff)
         run: ruff check src/
       - name: Type Checking (Mypy)
-        run: mypy src/ --ignore-missing-imports
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/src
+          mypy --package src --ignore-missing-imports
       - name: Unit Tests
         run: pytest tests/unit/
