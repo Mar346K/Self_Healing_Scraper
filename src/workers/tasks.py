@@ -1,6 +1,6 @@
 import json
 from urllib.parse import urlparse
-from typing import Any, Dict
+from typing import Any, Dict, cast
 import redis
 
 from src.workers.celery_app import celery_app
@@ -8,11 +8,12 @@ from src.scrapers.engine import StandardScraper
 from src.healers.llm_extractor import AIHealer
 from src.core.config import settings
 
-# Use the Pydantic settings here instead of hardcoding localhost
+# Connect directly to the local Redis instance to use as our rule cache
 redis_client = redis.Redis.from_url(settings.redis_url, decode_responses=True)
 
 
-@celery_app.task(name="extract_data_task")
+# Ignore Celery's missing type stubs for this specific decorator
+@celery_app.task(name="extract_data_task")  # type: ignore[untyped-decorator]
 def extract_data_task(url: str, target_schema: Dict[str, Any]) -> Dict[str, Any]:
     print(f"\n[Worker] Processing request for: {url}")
 
@@ -26,7 +27,11 @@ def extract_data_task(url: str, target_schema: Dict[str, Any]) -> Dict[str, Any]
 
     if cached_rules_str:
         print("[Worker] ⚡ Cached CSS rules found! Attempting Fast Extraction...")
-        rules = json.loads(cached_rules_str)
+
+        # Cast the Redis return as a string, then cast the JSON output as a Dict
+        rules_str = cast(str, cached_rules_str)
+        rules = cast(Dict[str, str], json.loads(rules_str))
+
         try:
             # Try to grab the data using standard Playwright methods
             fast_data = scraper.fast_extract(url, rules)
