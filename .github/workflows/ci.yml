@@ -1,5 +1,10 @@
 name: CI/CD Pipeline
 on: [push, pull_request]
+
+# Add this global environment variable to silence the Node 20 warning
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   audit-and-test:
     runs-on: ubuntu-latest
