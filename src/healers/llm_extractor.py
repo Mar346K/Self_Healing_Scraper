@@ -5,26 +5,34 @@ from google import genai
 from google.genai import types
 from dotenv import load_dotenv
 
-# Force the environment variables to load from the .env file
 load_dotenv()
-
-# The new Client automatically looks for the GEMINI_API_KEY environment variable
 client = genai.Client()
 
 
 class AIHealer:
     @staticmethod
-    def extract_json(raw_html: str, target_schema: Dict[str, Any]) -> Dict[str, Any]:
+    def extract_and_learn(
+        raw_html: str, target_schema: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """
-        Forces Gemini to extract structured data from raw HTML based on a dynamic schema.
+        Forces Gemini to extract data AND generate the CSS selectors needed to find it again.
         """
-        print("[Healer] Engaging Gemini API (New SDK) for deterministic extraction...")
+        print(
+            "[Healer] Engaging Gemini API to extract data and write new extraction rules..."
+        )
 
         safe_html = raw_html[:15000]
 
         prompt = f"""
-        You are a strict data extraction engine. Extract the information from the RAW HTML
-        and map it exactly to the keys in the TARGET SCHEMA.
+        You are a strict data extraction and web scraping engineering assistant.
+
+        You have two jobs:
+        1. Extract the information from the RAW HTML and map it exactly to the keys in the TARGET SCHEMA.
+        2. For every key in the TARGET SCHEMA, provide the most robust CSS selector that can be used to extract that specific data directly from the DOM using Playwright.
+
+        You MUST return a JSON object with EXACTLY two top-level keys:
+        - "extracted_data": containing the data matching the TARGET SCHEMA.
+        - "extraction_rules": containing a dictionary mapping the same schema keys to their CSS selectors.
 
         TARGET SCHEMA:
         {json.dumps(target_schema, indent=2)}
@@ -34,19 +42,16 @@ class AIHealer:
         """
 
         try:
-            # We use the updated 2.5-flash model via the new generate_content API
             response = client.models.generate_content(
                 model="gemini-2.5-flash",
                 contents=prompt,
                 config=types.GenerateContentConfig(
-                    response_mime_type="application/json",
-                    temperature=0.0,  # Zero creativity, purely deterministic
+                    response_mime_type="application/json", temperature=0.0
                 ),
             )
 
-            # Parse the string response back into a Python Dictionary
-            extracted_data = json.loads(response.text)
-            return extracted_data
+            payload = json.loads(response.text)
+            return payload
 
         except Exception as e:
             raise RuntimeError(f"Gemini Extraction failed: {str(e)}")
