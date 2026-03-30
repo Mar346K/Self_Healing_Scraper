@@ -1,10 +1,17 @@
 FROM python:3.12-slim
 WORKDIR /app
-# Install system dependencies for headless Chromium
-RUN apt-get update && apt-get install -y wget gnupg && \
-    playwright install-deps
+
+# 1. Copy the manifest
 COPY pyproject.toml .
+
+# 2. Install the Python packages (this installs the Playwright CLI)
 RUN pip install --no-cache-dir .
-RUN playwright install chromium
+
+# 3. Now that Playwright is installed, fetch the OS dependencies and the Chromium browser
+RUN playwright install-deps && playwright install chromium
+
+# 4. Copy the core logic
 COPY src/ /app/src/
+
+# 5. Boot the worker
 CMD ["celery", "-A", "src.workers.celery_app", "worker", "--loglevel=info"]
