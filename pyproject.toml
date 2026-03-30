@@ -37,6 +37,9 @@ target-version = "py312"
 
 [tool.mypy]
 strict = true
+explicit_package_bases = true
+mypy_path = "src"
+namespace_packages = true
 
 [tool.bandit]
 exclude_dirs = ["tests"]
