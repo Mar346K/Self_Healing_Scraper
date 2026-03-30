@@ -1,15 +1,15 @@
 import json
-import os
 from typing import Any, Dict
 
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 from dotenv import load_dotenv
 
 # Force the environment variables to load from the .env file
 load_dotenv()
 
-# Initialize the Gemini client
-genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
+# The new Client automatically looks for the GEMINI_API_KEY environment variable
+client = genai.Client()
 
 
 class AIHealer:
@@ -18,9 +18,8 @@ class AIHealer:
         """
         Forces Gemini to extract structured data from raw HTML based on a dynamic schema.
         """
-        print("[Healer] Engaging Gemini API for deterministic extraction...")
+        print("[Healer] Engaging Gemini API (New SDK) for deterministic extraction...")
 
-        # Truncating for MVP speed, though Gemini has a massive 1M+ context window
         safe_html = raw_html[:15000]
 
         prompt = f"""
@@ -35,16 +34,15 @@ class AIHealer:
         """
 
         try:
-            # We use the Flash model because it is blisteringly fast and practically free
-            model = genai.GenerativeModel(
-                "gemini-1.5-flash",
-                generation_config={
-                    "response_mime_type": "application/json",
-                    "temperature": 0.0,  # Zero creativity, purely deterministic
-                },
+            # We use the updated 2.5-flash model via the new generate_content API
+            response = client.models.generate_content(
+                model="gemini-2.5-flash",
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json",
+                    temperature=0.0,  # Zero creativity, purely deterministic
+                ),
             )
-
-            response = model.generate_content(prompt)
 
             # Parse the string response back into a Python Dictionary
             extracted_data = json.loads(response.text)
