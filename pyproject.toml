@@ -16,8 +16,9 @@ dependencies = [
     "pydantic-settings>=2.2.1",
     "opentelemetry-api>=1.23.0",   # Massive traceability
     "opentelemetry-sdk>=1.23.0",
-    "openai>=1.14.0",              # LLM client (swappable to Anthropic/Ollama)
-    "turboquant>=0.1.0"          # Drop this in later when we optimize the KV cache
+    "google-genai>=0.5.0",         # The new Gemini SDK
+    "python-dotenv>=1.0.1",        # Explicitly required for the .env loading
+    "turboquant>=0.1.0"
 ]
 
 [project.optional-dependencies]
