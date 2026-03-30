@@ -1,3 +1,13 @@
+![CI Status](https://img.shields.io/github/actions/workflow/status/[YOUR_GITHUB_USERNAME]/self_healing_scraper/ci.yml?branch=main&label=CI)
+![Python Version](https://img.shields.io/badge/python-3.12+-blue.svg)
+![Code Style](https://img.shields.io/badge/code%20style-ruff-000000.svg)
+![Security](https://img.shields.io/badge/security-bandit-yellow.svg)
+![Types](https://img.shields.io/badge/types-mypy-blue.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+
+# 🕸️ Autonomous Data Refinery (Self-Healing Scraper)
+...
+
 ### 🕸️ Autonomous Data Refinery (Self-Healing Scraper)
 
 A deterministic, polyglot data ingestion pipeline designed for volatile public web sources.
@@ -25,26 +35,30 @@ graph TD
     F --> J[Standardized JSON Output]
     H --> J
 ```
-
 ## 🚀 DevSecOps & Enterprise Standards
-* Zero-Trust Secrets: API keys managed via pydantic-settings.
+* Zero-Trust Secrets: API keys managed via pydantic-settings and securely injected into containers at runtime.
 
-* Strict Guardrails: CI/CD pipeline enforces ruff formatting, mypy static typing, and bandit AST security scanning on every commit.
+* Strict Guardrails: CI/CD pipeline enforces ruff formatting, mypy strict static typing, and bandit AST security scanning on every commit.
 
 * Bleeding-Edge Inference: Includes experimental support for Google Research's TurboQuant (3-bit KV Cache compression) for local, OOM-resistant HTML processing on consumer hardware.
 
 ## 💻 Quick Start (Dockerized)
-Spin up the entire microservice cluster locally:
+Configure your environment:
+Create a .env file in the root directory:
 
+```Bash
+GEMINI_API_KEY=your_api_key_here
+Spin up the cluster:
+```
 ```Bash
 docker compose up -d --build
 ```
-
 # Send a dynamic extraction request:
-
 
 ```Bash
 curl -X POST http://localhost:8000/extract \
      -H "Content-Type: application/json" \
-     -d '{"url": "https://example.com", "target_schema": {"main_heading": "string"}}'
+     -d '{"url": "[https://example.com](https://example.com)", "target_schema": {"main_heading": "string"}}'
 ```
+
+# Developed with a focus on high-velocity shipping and "zero-fail" manufacturing-honed rigor.
