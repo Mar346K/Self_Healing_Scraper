@@ -1,0 +1,38 @@
+[project]
+name = "self-healing-scraper"
+version = "0.1.0"
+description = "Autonomous, AI-healed data ingestion pipeline for volatile DOM structures."
+authors = [{name = "Marquis Johnathon Sanchez", email = "Marquis.j.sanchez@gmail.com"}]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.110.0",
+    "uvicorn>=0.29.0",
+    "celery>=5.3.6",
+    "redis>=5.0.3",
+    "playwright>=1.42.0",          # Headless browser orchestration
+    "beautifulsoup4>=4.12.3",      # DOM parsing
+    "pydantic>=2.6.4",             # Strict data validation
+    "pydantic-settings>=2.2.1",
+    "opentelemetry-api>=1.23.0",   # Massive traceability
+    "opentelemetry-sdk>=1.23.0",
+    "openai>=1.14.0",              # LLM client (swappable to Anthropic/Ollama)
+    # "turboquant>=0.1.0"          # Drop this in later when we optimize the KV cache
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.1.1",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.3.4",                 # Lightning-fast linting/formatting
+    "mypy>=1.9.0",                 # Strict typing
+    "bandit>=1.7.8",               # AST Security scanning
+    "pre-commit>=3.6.2",           # Git hook management
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.mypy]
+strict = true
